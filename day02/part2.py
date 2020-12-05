@@ -12,11 +12,7 @@ def check(line):
     return (password[p1] == chr) ^ (password[p2] == chr)
 
 def main():
-    valid = 0
-    for line in fileinput.input():
-        if check(line):
-            valid += 1
-    print(valid)
+    print(sum([check(line) for line in fileinput.input()]))
 
 if __name__ == "__main__":
     regex = re.compile('(?P<p1>\d+)-(?P<p2>\d+)\s+(?P<chr>\w):\s+(?P<password>\w+)')

@@ -3,11 +3,7 @@ import fileinput
 def main():
     target_sum = 2020
 
-    values = []
-    for line in fileinput.input():
-        value = int(line)
-        if value <= 2020:
-            values.append(value)
+    values = [int(line) for line in fileinput.input()]
 
     n = len(values)
     for i in range(n):

@@ -11,11 +11,7 @@ def check(line):
     return c >= min and c <= max
 
 def main():
-    valid = 0
-    for line in fileinput.input():
-        if check(line):
-            valid += 1
-    print(valid)
+    print(sum([check(line) for line in fileinput.input()]))
 
 if __name__ == "__main__":
     regex = re.compile('(?P<min>\d+)-(?P<max>\d+)\s+(?P<chr>\w):\s+(?P<password>\w+)')
