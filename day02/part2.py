@@ -3,12 +3,12 @@ import re
 
 def check(line):
     m = regex.match(line)
-    p1 = int(m.group(1)) - 1
-    p2 = int(m.group(2)) - 1
+    p1 = int(m.group('p1')) - 1
+    p2 = int(m.group('p2')) - 1
     if p1 < 0 or p2 < 0:
         raise IndexError
-    chr = m.group(3)
-    password = m.group(4)
+    chr = m.group('chr')
+    password = m.group('password')
     return (password[p1] == chr) ^ (password[p2] == chr)
 
 def main():
@@ -19,5 +19,5 @@ def main():
     print(valid)
 
 if __name__ == "__main__":
-    regex = re.compile('(\d+)-(\d+)\s+(\w):\s+(\w+)')
+    regex = re.compile('(?P<p1>\d+)-(?P<p2>\d+)\s+(?P<chr>\w):\s+(?P<password>\w+)')
     main()

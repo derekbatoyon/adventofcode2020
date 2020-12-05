@@ -2,7 +2,7 @@ import fileinput
 import re
 
 year = re.compile('\d\d\d\d$')
-height = re.compile('(\d+)(cm|in)$')
+height = re.compile('(?P<value>\d+)(?P<unit>cm|in)$')
 hair_color = re.compile('#[0-9a-f]{6}$')
 pid = re.compile('\d{9}$')
 
@@ -31,8 +31,8 @@ def validate_hgt(value):
     #   If in, the number must be at least 59 and at most 76
     m = height.match(value)
     if m:
-        value = int(m.group(1))
-        unit = m.group(2)
+        value = int(m.group('value'))
+        unit = m.group('unit')
         return unit == 'cm' and value in range(150, 194) or unit == 'in' and value in range(59, 77)
 
 def validate_hcl(value):
