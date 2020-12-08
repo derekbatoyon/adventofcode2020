@@ -27,8 +27,8 @@ class Graph(object):
             print(tail, '=>', head)
 
 def main():
-    container_re = re.compile('(?P<color>\w+ \w+) bags contain')
-    containee_re = re.compile('(?P<count>\d+) (?P<color>\w+ \w+) bags?')
+    container_re = re.compile('(?P<color>.*?) bags contain')
+    containee_re = re.compile('(?P<count>\d+) (?P<color>.*?) bags?')
 
     graph = Graph()
     for line in fileinput.input():
