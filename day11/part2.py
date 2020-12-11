@@ -1,4 +1,3 @@
-import fileinput
 import itertools
 import sys
 
