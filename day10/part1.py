@@ -3,9 +3,11 @@ import fileinput
 def main():
     count1 = 0
     count3 = 1
-    jolts = [0] + sorted([int(line) for line in fileinput.input()])
-    for i in range(1, len(jolts)):
-        difference = jolts[i] - jolts[i-1]
+    jolts = sorted([int(line) for line in fileinput.input()])
+    last_jolt = 0
+    for jolt in jolts:
+        difference = jolt - last_jolt
+        last_jolt = jolt
         if difference == 1:
             count1 += 1
         elif difference == 3:
