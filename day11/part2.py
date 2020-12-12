@@ -1,5 +1,4 @@
 import itertools
-import sys
 
 EMPTY_SEAT = 'L'
 OCCUPIED_SEAT = '#'
@@ -72,7 +71,6 @@ def main(args):
         keep_going = lambda r: r < args.rounds
 
     while keep_going(round):
-        sys.stderr.write('***{}***\n'.format(round+1))
         counter = Counter()
         new_grid = [[update(row, col, grid, counter) for col in range(cols)] for row in range(rows)]
         if counter.get_count() == 0:
