@@ -21,7 +21,7 @@ python3 part2.py test5.txt | diff $TMPFILE -
 echo "1202161486" > $TMPFILE
 python3 part2.py test6.txt | diff $TMPFILE -
 
-#echo "" > $TMPFILE
-#python3 part2.py input.txt | diff $TMPFILE -
+echo "1118684865113056" > $TMPFILE
+python3 part2.py input.txt | diff $TMPFILE -
 
 echo "pass"

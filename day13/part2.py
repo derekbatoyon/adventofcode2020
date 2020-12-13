@@ -15,21 +15,21 @@ def test(time, bus_matrix, offset_matrix):
     return check(result)
 
 def process(buses):
-    interval = max(buses)
+    interval = 1
+    time = 0
 
-    offset = buses[interval]
-    offset_matrix = np.array([t - offset for t in buses.values()])
+    for bus_count in range(2, len(buses)+1):
+        interval *= list(buses.keys())[bus_count-2]
+        bus_matrix = np.zeros((bus_count, bus_count))
+        for i, bus in enumerate(buses):
+            if i == bus_count: break
+            bus_matrix[i][i] = bus
+        offset_matrix = np.array(list(buses.values())[:bus_count])
 
-    bus_count = len(buses)
-    bus_matrix = np.zeros((bus_count, bus_count))
-    for i, bus in enumerate(buses):
-        bus_matrix[i][i] = bus
+        while not test(time, bus_matrix, offset_matrix):
+            time += interval
 
-    count = 1
-    while not test(count * interval, bus_matrix, offset_matrix):
-        count += 1
-
-    print(count * interval + offset_matrix[0])
+    print(time)
 
 def main():
     input = fileinput.input()
