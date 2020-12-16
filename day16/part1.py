@@ -1,21 +1,26 @@
 import fileinput
 import re
-import sys
+
+class Range(object):
+    def __init__(self, arg):
+        (self.lowerbound, self.upperbound) = tuple(int(n) for n in arg.split('-'))
+
+class Rule(object):
+    def __init__(self, args):
+        self.ranges = [Range(arg) for arg in args]
+
+    def is_valid(self, value):
+        return any(value >= range.lowerbound and value <= range.upperbound for range in self.ranges)
 
 class Rules(object):
     def __init__(self):
         self.rules = dict()
 
-    def add_rule(self, field, ranges):
-        self.rules[field] = ranges
+    def add_rule(self, field, rule):
+        self.rules[field] = rule
 
     def valid_for_at_least_one_field(self, value):
-        for field, rule in self.rules.items():
-            for range in rule:
-                if value >= range[0] and value <= range[1]:
-                    return True
-        sys.stderr.write('{} is invalid\n'.format(value))
-        return False
+        return any(rule.is_valid(value) for rule in self.rules.values())
 
 def check_error_rate(rules, tickets):
     error = 0
@@ -25,16 +30,14 @@ def check_error_rate(rules, tickets):
                 error += value
     return error
 
-def main():
+def read_input():
     rules_regex = re.compile('(?P<field>[^:]+):\s+(?P<range1>\d+-\d+)\s+or\s+(?P<range2>\d+-\d+)$')
     rules = Rules()
 
     input = fileinput.input()
     for line in input:
         if m:= rules_regex.match(line):
-            range1 = tuple([int(n) for n in m.group('range1').split('-')])
-            range2 = tuple([int(n) for n in m.group('range2').split('-')])
-            rules.add_rule(m.group('field'), [range1, range2])
+            rules.add_rule(m.group('field'), Rule(m.group('range1', 'range2')))
         else:
             break
 
@@ -48,7 +51,10 @@ def main():
             your_ticket = [int(n) for n in line.split(',')]
 
     nearby_tickets = [[int(n) for n in line.split(',')] for line in input]
+    return (rules, nearby_tickets)
 
+def main():
+    (rules, nearby_tickets) = read_input()
     print(check_error_rate(rules, nearby_tickets))
 
 if __name__ == "__main__":
