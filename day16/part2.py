@@ -27,9 +27,6 @@ class Rules(object):
     def valid_ticket(self, ticket):
         return all(self.valid_for_at_least_one_field(value) for value in ticket)
 
-    def valid_value(self, field, value):
-        return any(value >= range[0] and value <= range[1] for range in self.rules[field])
-
     def __iter__(self):
         return iter(self.rules)
 
