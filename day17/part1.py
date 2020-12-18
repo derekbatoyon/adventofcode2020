@@ -1,38 +1,17 @@
 import fileinput
 import sys
 
-neighbor_offets = [
-    (-1, -1, -1),
-    (-1, -1,  0),
-    (-1, -1,  1),
-    (-1,  0, -1),
-    (-1,  0,  0),
-    (-1,  0,  1),
-    (-1,  1, -1),
-    (-1,  1,  0),
-    (-1,  1,  1),
-    ( 0, -1, -1),
-    ( 0, -1,  0),
-    ( 0, -1,  1),
-    ( 0,  0, -1),
-    ( 0,  0,  1),
-    ( 0,  1, -1),
-    ( 0,  1,  0),
-    ( 0,  1,  1),
-    ( 1, -1, -1),
-    ( 1, -1,  0),
-    ( 1, -1,  1),
-    ( 1,  0, -1),
-    ( 1,  0,  0),
-    ( 1,  0,  1),
-    ( 1,  1, -1),
-    ( 1,  1,  0),
-    ( 1,  1,  1),
-]
+def neighbor_offets():
+    s = (-1, 0, 1)
+    for x in s:
+        for y in s:
+            for z in s:
+                if x != 0 or y != 0 or z != 0:
+                    yield x, y, z
 
 def determine_state(cubes, cube):
     active_count = 0
-    for offset in neighbor_offets:
+    for offset in neighbor_offets():
         neighbor = tuple(a+b for a, b in zip(cube, offset))
         if neighbor in cubes:
             active_count += 1
