@@ -39,23 +39,18 @@ def check_rule0(rules, line):
     rule31 = re.compile(build_pattern(rules, 31))
 
     line = line.strip()
-    midpoint = 0
-    while m := rule31.search(line, midpoint):
-        rule32_matches = 1
-        rule42_matches = 0
-        midpoint = m.start()
+
+    rule42_matches = 0
+    rule31_matches = 0
+
+    index = 0
+    while m := rule42.match(line, index):
+        rule42_matches += 1
         index = m.end()
-        while m := rule31.match(line, index):
-            rule32_matches += 1
-            index = m.end()
-        if index == len(line):
-            index = 0
-            while m := rule42.match(line, index, midpoint):
-                rule42_matches += 1
-                index = m.end()
-            if index == midpoint and rule42_matches > rule32_matches:
-                return True
-        midpoint += 1
+    while m := rule31.match(line, index):
+        rule31_matches += 1
+        index = m.end()
+    return index == len(line) and rule31_matches> 0 and rule42_matches > rule31_matches
 
 def main():
     input = fileinput.input()
