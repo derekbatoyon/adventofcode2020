@@ -72,13 +72,23 @@ def main(args):
     starting_cups = [int(c) for c in args.cups]
     minimum_label = min(starting_cups)
     maximum_label = max(starting_cups)
+    maximum_label = maximum_label if args.maximum is None else max(maximum_label, args.maximum)
 
-    current_cup = last_cup = Node(starting_cups[0])
+    cups = [None] * (maximum_label + 1)
+
+    cups[starting_cups[0]] = current_cup = last_cup = Node(starting_cups[0])
     for cup_label in starting_cups[1:]:
-        cup = Node(cup_label)
+        cups[cup_label] = cup = Node(cup_label)
         cup.prev = last_cup
         last_cup.next = cup
         last_cup = cup
+    if args.maximum:
+        for i in range(max(starting_cups), maximum_label):
+            cup_label = i + 1
+            cups[cup_label] = cup = Node(cup_label)
+            cup.prev = last_cup
+            last_cup.next = cup
+            last_cup = cup
     last_cup.next = current_cup
     current_cup.prev = last_cup
 
@@ -103,7 +113,7 @@ def main(args):
             destination_label -= 1
             if destination_label < minimum_label:
                 destination_label = maximum_label
-        destination = find_label(current_cup, destination_label)
+        destination = cups[destination_label]
 
         if args.debug:
             sys.stderr.write('destination: {}\n\n'.format(destination.value))
@@ -118,15 +128,18 @@ def main(args):
         first_print_offset = (move+1) % len(starting_cups)
         print_cups(sys.stderr, current_cup.Prev(first_print_offset), current_cup.value)
 
-    it = iter(find_label(current_cup, 1))
-    next(it)
-    print(''.join(str(n) for n in it))
+    label1 = cups[1].next.value
+    label2 = cups[1].next.next.value
+    if args.debug:
+        sys.stderr.write('{} x {}\n'.format(label1, label2))
+    print(label1 * label2)
 
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description='Crab Cups')
     parser.add_argument('cups', metavar='C', type=str, help='initial labeling')
     parser.add_argument('--moves', dest='moves', type=int,  default=10, help='the numebr of moves to execute')
+    parser.add_argument('--max', dest='maximum', type=int, help='the highest numbered cup label')
     parser.add_argument('--debug', action='store_true', help='enable debug output')
     parser.add_argument('--graph', action='store_true', help='enable graph output')
     args = parser.parse_args()
